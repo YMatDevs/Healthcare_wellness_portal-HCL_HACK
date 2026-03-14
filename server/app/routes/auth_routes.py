@@ -1,6 +1,6 @@
-from fastapi import APIRouter
-from app.schemas.auth_schema import RegisterSchema, LoginSchema
-from app.services.auth_service import register_user, login_user
+from fastapi import APIRouter, Response
+from app.schemas.auth_schema import LoginSchema, RegisterSchema
+from app.services.auth_service import login_user, register_user
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -11,6 +11,19 @@ async def register(data: RegisterSchema):
 
 
 @router.post("/login")
-async def login(data: LoginSchema):
-    return await login_user(data)
-#tyjtjt
+async def login(data: LoginSchema, response: Response):
+
+    result = await login_user(data)
+
+    token = result["access_token"]
+
+    response.set_cookie(
+        key="access_token",
+        value=token,
+        httponly=True,
+        secure=False,  # True in production
+        samesite="lax",
+        max_age=3600 * 12
+    )
+
+    return {"message": "Login successful"}
