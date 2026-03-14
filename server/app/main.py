@@ -4,6 +4,21 @@ from app.routes import health_tip_routes
 from app.routes import provider_routes
 from app.routes import reminder_routes
 from app.routes import public_routes
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI(title="Healthcare Portal API")
+
+origins = ["http://localhost:3000"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
 app = FastAPI(title="Healthcare Portal API")
 
 app.include_router(health_routes.router)
