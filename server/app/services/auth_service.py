@@ -1,4 +1,4 @@
-from app.repository.user_repository import get_user_by_email, create_user
+from app.repository.user_repository import get_user_by_email_role, create_user
 from app.core.hashing import hash_password, verify_password
 from app.core.jwt_handler import create_access_token
 from fastapi import HTTPException
@@ -6,10 +6,13 @@ from fastapi import HTTPException
 
 async def register_user(data):
 
-    existing_user = await get_user_by_email(data.email)
+    existing_user = await get_user_by_email_role(data.email, data.role)
 
     if existing_user:
-        raise HTTPException(status_code=400, detail="User already exists")
+        raise HTTPException(
+            status_code=400,
+            detail=f"{data.role} already registered with this email"
+        )
 
     user = {
         "email": data.email,
@@ -19,12 +22,13 @@ async def register_user(data):
 
     user_id = await create_user(user)
 
-    return {"message": "User created", "user_id": user_id}
-
-
+    return {
+        "message": f"{data.role} account created",
+        "user_id": user_id
+    }
 async def login_user(data):
 
-    user = await get_user_by_email(data.email)
+    user = await get_user_by_email_role(data.email, data.role)
 
     if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
