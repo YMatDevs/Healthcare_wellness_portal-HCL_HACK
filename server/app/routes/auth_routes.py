@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, Response, Depends
+from app.core.auth_middleware import get_current_user
 from app.schemas.auth_schema import LoginSchema, RegisterSchema
 from app.services.auth_service import login_user, register_user
 
@@ -33,3 +34,11 @@ async def logout(response: Response):
     response.delete_cookie("access_token")
 
     return {"message": "Logged out"}
+@router.get("/verify")
+async def verify_token(current_user = Depends(get_current_user)):
+
+    return {
+        "valid": True,
+        "user_id": current_user["user_id"],
+        "role": current_user["role"]
+    }
