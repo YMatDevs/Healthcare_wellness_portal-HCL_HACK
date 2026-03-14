@@ -1,4 +1,4 @@
-from app.repositories.user_repository import get_user_by_email, create_user
+from app.repository.user_repository import get_user_by_email, create_user
 from app.core.hashing import hash_password, verify_password
 from app.core.jwt_handler import create_access_token
 from fastapi import HTTPException
