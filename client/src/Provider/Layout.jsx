@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { SimpleSidebar } from "../components/Sidebar";
 
-export function DashboardLayout() {
+export function Layout() {
   return (
     <div className="d-flex" style={{ minHeight: "100vh" }}>
       <SimpleSidebar />
