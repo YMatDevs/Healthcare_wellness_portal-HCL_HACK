@@ -1,11 +1,45 @@
-import React from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Container, Row, Col, Card, Form, Button, Alert } from "react-bootstrap";
+import { authApi } from "../Services/ApiService";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    role: "",
+  });
+
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Register submitted");
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const data = await authApi.register(formData);
+
+      console.log(data)
+
+      navigate("/auth/login");
+    } catch (err) {
+      setError(err.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -16,36 +50,70 @@ export default function Register() {
             <Card.Body className="p-4">
               <h3 className="text-center mb-4">Register</h3>
 
+              {error && <Alert variant="danger">{error}</Alert>}
+
               <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="name">
+                {/* <Form.Group className="mb-3">
                   <Form.Label>Full Name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your name" required />
-                </Form.Group>
+                  <Form.Control
+                    type="text"
+                    name="name"
+                    placeholder="Enter your name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                  />
+                </Form.Group> */}
 
-                <Form.Group className="mb-3" controlId="email">
+                <Form.Group className="mb-3">
                   <Form.Label>Email</Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" required />
+                  <Form.Control
+                    type="email"
+                    name="email"
+                    placeholder="Enter email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                  />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="password">
+                <Form.Group className="mb-3">
                   <Form.Label>Password</Form.Label>
-                  <Form.Control type="password" placeholder="Create password" required />
+                  <Form.Control
+                    type="password"
+                    name="password"
+                    placeholder="Create password"
+                    required
+                    value={formData.password}
+                    onChange={handleChange}
+                  />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="role">
+                <Form.Group className="mb-3">
                   <Form.Label>I am a</Form.Label>
-                  <Form.Select required>
+                  <Form.Select
+                    name="role"
+                    required
+                    value={formData.role}
+                    onChange={handleChange}
+                  >
                     <option value="">Select role</option>
                     <option value="patient">Patient</option>
                     <option value="provider">Healthcare Provider</option>
                   </Form.Select>
                 </Form.Group>
 
-                <Button variant="primary" type="submit" className="w-100">
-                  Register
+                <Button
+                  variant="primary"
+                  type="submit"
+                  className="w-100"
+                  disabled={loading}
+                >
+                  {loading ? "Registering..." : "Register"}
                 </Button>
-              </Form>
 
+                <a href="/auth/login">Got to Login</a>
+              </Form>
             </Card.Body>
           </Card>
         </Col>

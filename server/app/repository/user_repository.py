@@ -1,8 +1,10 @@
 from app.database import db
 
-async def get_user_by_email(email: str):
-    return await db.users.find_one({"email": email})
-
+async def get_user_by_email_role(email: str, role: str):
+    return await db.users.find_one({
+        "email": email,
+        "role": role
+    })
 
 async def create_user(user_data: dict):
 

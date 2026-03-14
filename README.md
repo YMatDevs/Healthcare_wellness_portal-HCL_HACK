@@ -1,1 +1,493 @@
-# Healthcare_wellness_portal-HCL_HACK
+# 🏥 Healthcare Wellness Portal
+
+> **Healthcare Wellness Portal**, developed for the **HCL Hackathon**.
+
+The frontend delivers a responsive and user-friendly interface for patients and providers to interact with the system. Built with **React (Vite)**, it uses **Zustand** for global state management and **Axios** for communication with the backend APIs, enabling secure authentication and provider monitoring through a modern UI.
+
+The backend provides secure APIs for authentication, patient wellness tracking, provider monitoring, and public health information. Built with **FastAPI** and **MongoDB Atlas**, it implements JWT authentication, cookie-based sessions, and role-based access control.
+
+---
+
+## 📋 Table of Contents
+
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Authentication Flow](#-authentication-flow)
+- [API Endpoints](#-api-endpoints)
+- [Database Collections](#-database-collections)
+- [Setup Instructions](#-setup-instructions)
+- [CORS Configuration](#-cors-configuration)
+
+---
+
+## ✨ Features
+
+### 🔐 Authentication & Security
+- User registration and login
+- Password hashing using **bcrypt**
+- **JWT**-based authentication
+- **HTTPOnly** cookie session management
+- Role-based authorization
+- Cross-Origin support via **CORS** middleware
+
+### 👤 Patient Features
+Patients can:
+- Register and login
+- Maintain a health profile
+- Track wellness goals
+- Log daily wellness activities
+- View a personalized dashboard
+- Receive health tips
+
+### 👨‍⚕️ Provider Features
+Providers can:
+- View assigned patients
+- Monitor patient wellness progress
+- Access patient health summaries
+
+### 📊 Dashboard
+The dashboard API provides:
+- Goal tracking
+- Health activity logs
+- Wellness progress summary
+
+### 📚 Public Health Information
+Public APIs provide educational health resources including:
+- COVID-19 information
+- Lifestyle advice
+- Preventive health guidelines
+
+---
+
+## 🛠 Tech Stack
+
+Frontend
+| Category | Technology |
+|---|---|
+| **Framework** | React (Vite) |
+| **State Management** | Zustand |
+| **HTTP Client** | Axios |
+| **UI Library** | React Bootstrap |
+
+Backend
+| Category | Technology |
+|---|---|
+| **Backend Framework** | FastAPI |
+| **Database** | MongoDB Atlas |
+| **Async DB Driver** | Motor |
+| **Authentication** | JWT (`python-jose`), Passlib (bcrypt) |
+| **Validation** | Pydantic |
+| **Server** | Uvicorn |
+| **Config** | Python-dotenv |
+| **Middleware** | FastAPI CORS Middleware |
+
+---
+
+## 🏗 Project Structure
+```
+client/
+│
+├── public/                     # Static files
+│
+├── src/
+│   │
+│   ├── assets/                 # Images, icons, fonts
+│   │   ├── images/
+│   │   └── styles/
+│   │
+│   ├── components/             # Reusable UI components
+│   │   ├── Navbar.jsx
+│   │   ├── Footer.jsx
+│   │   ├── ProtectedRoute.jsx
+│   │   └── Loader.jsx
+│   │
+│   ├── pages/                  # Application pages (routes)
+│   │   ├── Home.jsx
+│   │   ├── Dashboard.jsx
+│   │   │
+│   │   └── auth/
+│   │       ├── Login.jsx
+│   │       └── Register.jsx
+│   │
+│   ├── Provider/               # Context providers
+│   │   └── AuthProvider.jsx
+│   │
+│   ├── Services/               # API service layer
+│   │   ├── api.js
+│   │   └── authApi.js
+│   │
+│   ├── stores/                 # State management (Zustand/Redux)
+│   │   └── authStore.js
+│   │
+│   ├── App.jsx                 # Root component
+│   ├── main.jsx                # Entry point
+│   │
+│   ├── App.css
+│   └── index.css
+│
+├── .gitignore
+├── index.html
+├── package.json
+├── package-lock.json
+├── vite.config.js
+└── eslint.config.js
+server/
+│
+├── app/
+│   ├── core/
+│   │   ├── hashing.py
+│   │   ├── jwt_handler.py
+│   │   ├── auth_middleware.py
+│   │   └── role_guard.py
+│   │
+│   ├── repository/
+│   │   ├── user_repository.py
+│   │   ├── patient_repository.py
+│   │   ├── goal_repository.py
+│   │   ├── goal_log_repository.py
+│   │   ├── article_repository.py
+│   │   └── reminder_repository.py
+│   │
+│   ├── services/
+│   │   ├── auth_service.py
+│   │   ├── dashboard_service.py
+│   │   ├── health_tip_service.py
+│   │   └── article_service.py
+│   │
+│   ├── routes/
+│   │   ├── auth_routes.py
+│   │   ├── patient_routes.py
+│   │   ├── dashboard_routes.py
+│   │   ├── goal_log_routes.py
+│   │   ├── health_tip_routes.py
+│   │   ├── provider_routes.py
+│   │   └── public_routes.py
+│   │
+│   ├── schemas/
+│   ├── database.py
+│   └── config.py
+│
+└── main.py
+```
+
+---
+
+## 🔐 Authentication Flow
+```
+User Login
+    ↓
+JWT Token Generated
+    ↓
+Token stored in HTTPOnly Cookie
+    ↓
+Browser sends cookie automatically
+    ↓
+Auth Middleware verifies token
+    ↓
+User authorized to access protected APIs
+```
+
+---
+
+## 🧑‍💻 API Endpoints
+
+### Authentication
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/auth/register` | Register a new user |
+| `POST` | `/auth/login` | Login and receive JWT cookie |
+| `POST` | `/auth/logout` | Logout and clear session |
+| `GET` | `/auth/verify` | Verify current session |
+
+### Patient APIs
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/patients/me` | Get current patient profile |
+| `PUT` | `/patients/me` | Update patient profile |
+
+### Wellness Goals
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/goals` | Create a new wellness goal |
+| `GET` | `/goals` | List all wellness goals |
+
+### Goal Logs
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/logs` | Log a wellness activity |
+| `GET` | `/logs` | Retrieve activity logs |
+
+### Dashboard
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/dashboard` | Get personalized dashboard summary |
+
+### Health Tips
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/health-tip` | Get a personalized health tip |
+
+### Provider APIs
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/provider/patients` | List all assigned patients |
+| `GET` | `/provider/patient/{id}` | Get a specific patient's details |
+
+### Public APIs
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/public/topics` | List available health topics |
+| `GET` | `/public/articles/{topic}` | Get articles for a topic |
+| `GET` | `/public/privacy-policy` | View privacy policy |
+
+---
+
+## 🗄 Database Collections
+
+The system uses the following MongoDB collections:
+
+- `users`
+- `patients`
+- `goals`
+- `goal_logs`
+- `health_tips`
+- `health_articles`
+- `reminders`
+
+**Example user document:**
+```json
+{
+  "email": "user@gmail.com",
+  "password": "hashed_password",
+  "role": "patient"
+}
+```
+
+---
+
+## ⚙️ Setup Instructions
+
+Frontend
+### 1. Navigate to the Client Folder
+```bash
+cd client
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Run the Development Server
+```bash
+npm run dev
+```
+
+The frontend will start at:
+```
+http://localhost:5173
+```
+
+### 4. Build for Production
+
+```bash
+npm run build
+```
+
+
+
+Backend
+### 1. Clone the Repository
+```bash
+git clone <repository-url>
+cd server
+```
+
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file in the root directory:
+```env
+MONGO_URI=your_mongodb_atlas_connection_string
+DATABASE_NAME=healthcare_db
+JWT_SECRET=your_secret_key
+```
+
+### 4. Run the Server
+```bash
+uvicorn app.main:app --reload
+```
+
+The backend will be available at:
+
+- **API Base URL:** `http://localhost:8000`
+- **Swagger Docs:** `http://localhost:8000/docs`
+
+---
+---
+
+## 🔒 Extra Implementations & Security Enhancements
+
+### 1️⃣ JWT-Based Authentication
+
+The backend implements JWT (JSON Web Token) authentication to securely identify users.
+
+**Features:**
+- Token generated at login
+- Token contains `user_id` and `role`
+- Token expiration added for security
+- Token validated before accessing protected APIs
+
+This ensures only authenticated users can access protected resources.
+
+---
+
+### 2️⃣ HTTPOnly Cookie-Based Session Handling
+
+Instead of storing tokens in frontend storage, the system uses **HTTPOnly cookies**.
+
+**Benefits:**
+- Prevents XSS attacks
+- JavaScript cannot access the token
+- Browser automatically attaches cookie with requests
+
+This adds an extra security layer for session management.
+
+---
+
+### 3️⃣ Secure API Protection Layer
+
+Protected APIs require token verification through authentication middleware.
+
+**Flow:**
+```
+Request
+    ↓
+Cookie Token
+    ↓
+Middleware verifies JWT
+    ↓
+User validated
+    ↓
+Access granted
+```
+
+This ensures:
+- Unauthorized users cannot access sensitive APIs
+- Only authenticated requests are processed
+
+---
+
+### 4️⃣ Role-Based Access Control
+
+The system implements role-based authorization.
+
+**Roles supported:**
+
+| Role | Access |
+|---|---|
+| `patient` | Can access only their own data |
+| `provider` | Can access their assigned patients |
+| `admin` | Has extended access across the system |
+
+This ensures data separation and controlled access.
+
+---
+
+### 5️⃣ Cross-Origin Security (CORS Protection)
+
+CORS middleware is configured to allow requests only from approved frontend origins.
+
+**Features:**
+- Prevents unauthorized cross-origin access
+- Allows secure communication between frontend and backend
+
+---
+
+### 6️⃣ Password Hashing
+
+User passwords are **never stored in plain text**. Passwords are hashed using:
+```
+bcrypt
+```
+
+**Security benefits:**
+- Protects user credentials
+- Prevents password leaks even if the database is compromised
+
+---
+
+### 7️⃣ Token Verification Ping Mechanism
+
+The frontend periodically sends requests to verify if the session is still valid.
+```http
+GET /auth/verify
+```
+
+**Benefits:**
+- Automatically detects expired tokens
+- Maintains secure active sessions
+
+---
+
+### 8️⃣ Public API Segregation
+
+The system clearly separates **public** and **protected** APIs.
+
+| Type | Endpoints |
+|---|---|
+| **Public** | `/public/articles`, `/public/topics` |
+| **Protected** | `/dashboard`, `/goals`, `/logs`, `/provider` |
+
+This ensures sensitive endpoints are never publicly exposed.
+
+---
+
+### 9️⃣ Layered Backend Architecture
+
+The backend follows a clean layered architecture pattern:
+```
+Routes → Services → Repository → Database
+```
+
+**Benefits:**
+- Separation of concerns
+- Maintainable and readable codebase
+- Scalable backend design
+
+---
+
+### 🔟 Secure MongoDB Atlas Integration
+
+The project uses **MongoDB Atlas** cloud database with environment variables for credentials.
+
+Sensitive values are stored in `.env` instead of hardcoded in source code:
+```env
+MONGO_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_secret_key
+```
+
+This prevents credential exposure in version control.
+## 🌐 CORS Configuration
+
+CORS is configured to allow frontend access:
+```python
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+```
+
+---
+
+## 📄 License
+
+This project was developed for the **HCL Hackathon**. All rights reserved.

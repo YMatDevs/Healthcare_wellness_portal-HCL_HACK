@@ -1,14 +1,30 @@
-import { useState } from 'react'
+import { createBrowserRouter, RouterProvider, Navigate, Outlet } from "react-router-dom";
 
-import './App.css'
+import { Layout } from "./Provider/Layout";
+import Protected from "./Provider/Protected";
 
-function App() {
+import Login from './pages/Login'
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import ProfilePage from "./pages/Profile";
 
-  return (
-    <>
-      <h1>Hello World</h1>
-    </>
-  )
+const router = createBrowserRouter([
+  { path: 'auth/login', element: <Login /> },
+  { path: 'auth/register', element: <Register /> },
+  { 
+    element: <Protected />,
+    // element: <><Outlet /></>,
+    children: [
+      { element: <Layout />, children: [
+        {path: 'patient', children: [
+        { path: 'dashboard', element: <Dashboard /> },
+        { path: 'profile', element: <ProfilePage /> }]},
+      ], }
+    ],
+  },
+  { path: '*', element: <Navigate to={'auth/login'} replace  />},
+]);
+
+export default function App() {
+  return <RouterProvider router={router} />;
 }
-
-export default App
