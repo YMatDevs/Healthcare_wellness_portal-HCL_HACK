@@ -329,7 +329,150 @@ The backend will be available at:
 - **Swagger Docs:** `http://localhost:8000/docs`
 
 ---
+---
 
+## 🔒 Extra Implementations & Security Enhancements
+
+### 1️⃣ JWT-Based Authentication
+
+The backend implements JWT (JSON Web Token) authentication to securely identify users.
+
+**Features:**
+- Token generated at login
+- Token contains `user_id` and `role`
+- Token expiration added for security
+- Token validated before accessing protected APIs
+
+This ensures only authenticated users can access protected resources.
+
+---
+
+### 2️⃣ HTTPOnly Cookie-Based Session Handling
+
+Instead of storing tokens in frontend storage, the system uses **HTTPOnly cookies**.
+
+**Benefits:**
+- Prevents XSS attacks
+- JavaScript cannot access the token
+- Browser automatically attaches cookie with requests
+
+This adds an extra security layer for session management.
+
+---
+
+### 3️⃣ Secure API Protection Layer
+
+Protected APIs require token verification through authentication middleware.
+
+**Flow:**
+```
+Request
+    ↓
+Cookie Token
+    ↓
+Middleware verifies JWT
+    ↓
+User validated
+    ↓
+Access granted
+```
+
+This ensures:
+- Unauthorized users cannot access sensitive APIs
+- Only authenticated requests are processed
+
+---
+
+### 4️⃣ Role-Based Access Control
+
+The system implements role-based authorization.
+
+**Roles supported:**
+
+| Role | Access |
+|---|---|
+| `patient` | Can access only their own data |
+| `provider` | Can access their assigned patients |
+| `admin` | Has extended access across the system |
+
+This ensures data separation and controlled access.
+
+---
+
+### 5️⃣ Cross-Origin Security (CORS Protection)
+
+CORS middleware is configured to allow requests only from approved frontend origins.
+
+**Features:**
+- Prevents unauthorized cross-origin access
+- Allows secure communication between frontend and backend
+
+---
+
+### 6️⃣ Password Hashing
+
+User passwords are **never stored in plain text**. Passwords are hashed using:
+```
+bcrypt
+```
+
+**Security benefits:**
+- Protects user credentials
+- Prevents password leaks even if the database is compromised
+
+---
+
+### 7️⃣ Token Verification Ping Mechanism
+
+The frontend periodically sends requests to verify if the session is still valid.
+```http
+GET /auth/verify
+```
+
+**Benefits:**
+- Automatically detects expired tokens
+- Maintains secure active sessions
+
+---
+
+### 8️⃣ Public API Segregation
+
+The system clearly separates **public** and **protected** APIs.
+
+| Type | Endpoints |
+|---|---|
+| **Public** | `/public/articles`, `/public/topics` |
+| **Protected** | `/dashboard`, `/goals`, `/logs`, `/provider` |
+
+This ensures sensitive endpoints are never publicly exposed.
+
+---
+
+### 9️⃣ Layered Backend Architecture
+
+The backend follows a clean layered architecture pattern:
+```
+Routes → Services → Repository → Database
+```
+
+**Benefits:**
+- Separation of concerns
+- Maintainable and readable codebase
+- Scalable backend design
+
+---
+
+### 🔟 Secure MongoDB Atlas Integration
+
+The project uses **MongoDB Atlas** cloud database with environment variables for credentials.
+
+Sensitive values are stored in `.env` instead of hardcoded in source code:
+```env
+MONGO_URI=your_mongodb_atlas_connection_string
+JWT_SECRET=your_secret_key
+```
+
+This prevents credential exposure in version control.
 ## 🌐 CORS Configuration
 
 CORS is configured to allow frontend access:
