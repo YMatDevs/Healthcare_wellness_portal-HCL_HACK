@@ -1,0 +1,29 @@
+fastapi
+uvicorn[standard]
+
+# Database
+motor
+pymongo
+
+# Validation
+pydantic
+pydantic-settings
+email-validator
+
+# Auth & Security
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+
+# Environment variables
+python-dotenv
+
+# Utilities
+python-dateutil
+
+# Logging / requests (optional but useful)
+requests
+
+# Testing
+pytest
+httpx
