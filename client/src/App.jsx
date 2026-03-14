@@ -21,7 +21,8 @@ const router = createBrowserRouter([
         { path: 'profile', element: <ProfilePage /> }]},
       ], }
     ],
-  }
+  },
+  { path: '*', element: <Navigate to={'auth/login'} replace  />},
 ]);
 
 export default function App() {
