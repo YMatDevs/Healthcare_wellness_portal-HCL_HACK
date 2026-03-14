@@ -5,11 +5,7 @@ from fastapi import HTTPException
 
 
 async def register_user(data):
-
-    existing_user = await get_user_by_email(data.email)
-
-    if existing_user:
-        raise HTTPException(status_code=400, detail="User already exists")
+    print("Registering user:", data)
 
     user = {
         "email": data.email,
@@ -17,9 +13,22 @@ async def register_user(data):
         "role": data.role
     }
 
+    print("User data:", user)
+
     user_id = await create_user(user)
 
-    return {"message": "User created", "user_id": user_id}
+    print("Result from create_user:", user_id)
+
+    if user_id == data.role:
+        raise HTTPException(
+            status_code=400,
+            detail=f"User already exists as {data.role}"
+        )
+
+    return {
+        "message": "User registered successfully",
+        "user_id": user_id
+    }   
 
 
 async def login_user(data):

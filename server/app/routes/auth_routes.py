@@ -8,7 +8,9 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 @router.post("/register")
 async def register(data: RegisterSchema):
-    return await register_user(data)
+    resp = await register_user(data)
+    print(resp)
+    return resp
 
 @router.post("/login")
 async def login(data: LoginSchema, response: Response):
@@ -21,10 +23,13 @@ async def login(data: LoginSchema, response: Response):
         key="access_token",
         value=token,
         httponly=True,
-        secure=False,        # True in production (HTTPS)
-        samesite="none",     # IMPORTANT for cross-origin
-        max_age=60*60*12
+        secure=True,         # ✅ required when samesite="none"
+        samesite="none",     # ✅ needed for cross-origin
+        max_age=60 * 60 * 12
     )
+    print("✅ Cookie set with token:", token[:20], "...")  # check token exists
+    return {"message": "Login successful"}
+    
 
     return {"message": "Login successful"}
 @router.post("/logout")
