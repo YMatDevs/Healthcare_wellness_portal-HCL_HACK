@@ -27,3 +27,9 @@ async def login(data: LoginSchema, response: Response):
     )
 
     return {"message": "Login successful"}
+@router.post("/logout")
+async def logout(response: Response):
+
+    response.delete_cookie("access_token")
+
+    return {"message": "Logged out"}
