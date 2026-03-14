@@ -1,6 +1,8 @@
-# 🏥 Healthcare Wellness Portal — Backend
+# 🏥 Healthcare Wellness Portal
 
-> Backend service for the **Healthcare Wellness Portal**, developed for the **HCL Hackathon**.
+> **Healthcare Wellness Portal**, developed for the **HCL Hackathon**.
+
+The frontend delivers a responsive and user-friendly interface for patients and providers to interact with the system. Built with **React (Vite)**, it uses **Zustand** for global state management and **Axios** for communication with the backend APIs, enabling secure authentication and provider monitoring through a modern UI.
 
 The backend provides secure APIs for authentication, patient wellness tracking, provider monitoring, and public health information. Built with **FastAPI** and **MongoDB Atlas**, it implements JWT authentication, cookie-based sessions, and role-based access control.
 
@@ -60,6 +62,15 @@ Public APIs provide educational health resources including:
 
 ## 🛠 Tech Stack
 
+Frontend
+| Category | Technology |
+|---|---|
+| **Framework** | React (Vite) |
+| **State Management** | Zustand |
+| **HTTP Client** | Axios |
+| **UI Library** | React Bootstrap |
+
+Backend
 | Category | Technology |
 |---|---|
 | **Backend Framework** | FastAPI |
@@ -75,6 +86,52 @@ Public APIs provide educational health resources including:
 
 ## 🏗 Project Structure
 ```
+client/
+│
+├── public/                     # Static files
+│
+├── src/
+│   │
+│   ├── assets/                 # Images, icons, fonts
+│   │   ├── images/
+│   │   └── styles/
+│   │
+│   ├── components/             # Reusable UI components
+│   │   ├── Navbar.jsx
+│   │   ├── Footer.jsx
+│   │   ├── ProtectedRoute.jsx
+│   │   └── Loader.jsx
+│   │
+│   ├── pages/                  # Application pages (routes)
+│   │   ├── Home.jsx
+│   │   ├── Dashboard.jsx
+│   │   │
+│   │   └── auth/
+│   │       ├── Login.jsx
+│   │       └── Register.jsx
+│   │
+│   ├── Provider/               # Context providers
+│   │   └── AuthProvider.jsx
+│   │
+│   ├── Services/               # API service layer
+│   │   ├── api.js
+│   │   └── authApi.js
+│   │
+│   ├── stores/                 # State management (Zustand/Redux)
+│   │   └── authStore.js
+│   │
+│   ├── App.jsx                 # Root component
+│   ├── main.jsx                # Entry point
+│   │
+│   ├── App.css
+│   └── index.css
+│
+├── .gitignore
+├── index.html
+├── package.json
+├── package-lock.json
+├── vite.config.js
+└── eslint.config.js
 server/
 │
 ├── app/
@@ -211,6 +268,36 @@ The system uses the following MongoDB collections:
 
 ## ⚙️ Setup Instructions
 
+Frontend
+### 1. Navigate to the Client Folder
+```bash
+cd client
+```
+
+### 2. Install Dependencies
+```bash
+npm install
+```
+
+### 3. Run the Development Server
+```bash
+npm run dev
+```
+
+The frontend will start at:
+```
+http://localhost:5173
+```
+
+### 4. Build for Production
+
+```bash
+npm run build
+```
+
+
+
+Backend
 ### 1. Clone the Repository
 ```bash
 git clone <repository-url>
