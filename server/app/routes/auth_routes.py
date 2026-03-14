@@ -10,7 +10,6 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 async def register(data: RegisterSchema):
     return await register_user(data)
 
-
 @router.post("/login")
 async def login(data: LoginSchema, response: Response):
 
@@ -22,9 +21,9 @@ async def login(data: LoginSchema, response: Response):
         key="access_token",
         value=token,
         httponly=True,
-        secure=False,  # True in production
-        samesite="lax",
-        max_age=3600 * 12
+        secure=False,        # True in production (HTTPS)
+        samesite="none",     # IMPORTANT for cross-origin
+        max_age=60*60*12
     )
 
     return {"message": "Login successful"}
