@@ -7,7 +7,9 @@ from app.routes import public_routes
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Healthcare Portal API")
-
+@app.get("/")
+def root():
+    return{"message":"Healthcare Wellness API running"}
 origins = ["http://localhost:3000"]
 
 app.add_middleware(
